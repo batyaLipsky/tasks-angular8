@@ -1,0 +1,53 @@
+<div class="container">
+  <div style="z-index: 5; text-align: center;">התוכנית מיועדת עבור עורכי דין.
+<br>
+    המטרה היא להזכיר לעורך הדין באילו תיקים עליו לטפל לפי סדר דחיפותם.
+    <br>
+אין אפשרות להכניס לרשימת המשימות תיקים שתאריך ההגשה שלהם כבר עבר.
+</div>
+  <form class="example-form" style="right: 25vw; ">
+    <mat-form-field class="col-sm-4">
+      <mat-label>מספר תיק</mat-label>
+      <input matInput type="number" [(ngModel)]="caseNumber" name="caseNumber">
+      <button mat-button *ngIf="newCaseControl" matSuffix mat-icon-button aria-label="Clear"
+        (click)="newTask.caseNumber=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-4">
+      <mat-label>תאריך</mat-label>
+      <input matInput type="date" [(ngModel)]="deadlineForSubmission" name="deadlineForSubmission">
+      <button mat-button *ngIf="newDateControl" matSuffix mat-icon-button aria-label="Clear"
+        (click)="newTask.deadlineForSubmission=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-4">
+      <mat-label>משימה חדשה</mat-label>
+      <input matInput [formControl]="newTaskControl" [errorStateMatcher]="matcher">
+      <button mat-button *ngIf="newTaskControl" matSuffix mat-icon-button aria-label="Clear"
+        (click)="newTaskControl.reset()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-error *ngIf="newTaskControl.hasError('minlength')">
+        אורך המשימה צריך להיות לפחות 3 תווים.
+      </mat-error>
+    </mat-form-field>
+    <button mat-stroked-button class="col" color="primary" [disabled]="!newTaskControl.valid"
+      (click)="addTask()">הוספה</button>
+  </form>
+
+  <div class="row">
+    <h5 class="col-sm-1"></h5>
+    <h5 class="col-sm-2">מספר תיק</h5>
+    <h5 class="col-sm-7">משימה</h5>
+    <h5 class="col-sm-2">תאריך אחרון להגשה</h5>
+  </div>
+  <mat-list>
+    <mat-list-item *ngFor="let item of tasksList;let i = index">
+      <app-task [task]=item [index]=(i+1) style="width: 100%;" (returnTaskForDelete)="deleteTask($event)"></app-task>
+    </mat-list-item>
+  </mat-list>
+</div>
